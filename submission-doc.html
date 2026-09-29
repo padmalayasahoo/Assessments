@@ -1,0 +1,356 @@
+<title>QE Framework Submission</title>
+<style>
+  :root {
+    --ink: #1b2430;
+    --paper: #faf8f4;
+    --surface: #ffffff;
+    --border: #e3ddd2;
+    --muted: #6b7280;
+    --accent: #2f6feb;
+    --accent-soft: #e8f0ff;
+    --ok: #1f9d55;
+    --ok-soft: #e7f6ec;
+    --mono-bg: #12161f;
+    --mono-text: #d8e0ee;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #e9ecf1;
+      --paper: #14171d;
+      --surface: #1b1f27;
+      --border: #2b3038;
+      --muted: #9aa3af;
+      --accent: #6f9bff;
+      --accent-soft: #1f2a42;
+      --ok: #4ade80;
+      --ok-soft: #14261a;
+      --mono-bg: #0c0e13;
+      --mono-text: #cfd8e6;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e9ecf1;
+    --paper: #14171d;
+    --surface: #1b1f27;
+    --border: #2b3038;
+    --muted: #9aa3af;
+    --accent: #6f9bff;
+    --accent-soft: #1f2a42;
+    --ok: #4ade80;
+    --ok-soft: #14261a;
+    --mono-bg: #0c0e13;
+    --mono-text: #cfd8e6;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    margin: 0;
+    padding-inline: 16px;
+    padding-block: 2.5rem;
+    line-height: 1.55;
+  }
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .masthead {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  h1 {
+    font-size: clamp(1.5rem, 4vw, 2.05rem);
+    margin: 0.35rem 0 0.4rem;
+    text-wrap: balance;
+  }
+  .subtitle { color: var(--muted); margin: 0; font-size: 0.98rem; }
+  .meta-row {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .meta-row strong { color: var(--ink); }
+
+  h2 {
+    font-size: 1.15rem;
+    margin: 2.4rem 0 0.9rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+  }
+  h2 .num {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--accent);
+    font-size: 0.95rem;
+  }
+  h3 {
+    font-size: 0.95rem;
+    margin: 1.3rem 0 0.5rem;
+    color: var(--ink);
+  }
+  p { margin: 0.5rem 0; }
+  a { color: var(--accent); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.15rem;
+    margin: 0.7rem 0;
+  }
+
+  .checklist { list-style: none; padding: 0; margin: 0.4rem 0; display: flex; flex-direction: column; gap: 0.55rem; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.92rem;
+  }
+  .checklist li::before {
+    content: "";
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+    margin-top: 0.15rem;
+    border-radius: 4px;
+    background: var(--ok-soft);
+    border: 1px solid var(--ok);
+    background-image: linear-gradient(45deg, transparent 42%, var(--ok) 42%, var(--ok) 58%, transparent 58%),
+                       linear-gradient(-45deg, transparent 58%, var(--ok) 58%, var(--ok) 42%, transparent 42%);
+  }
+  .path {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 0.05rem 0.4rem;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin: 0.6rem 0;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.5rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th { color: var(--muted); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  .tbl-wrap { overflow-x: auto; }
+
+  pre {
+    background: var(--mono-bg);
+    color: var(--mono-text);
+    border-radius: 8px;
+    padding: 0.9rem 1rem;
+    overflow-x: auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin: 0.6rem 0;
+  }
+  code { font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; }
+  :not(pre) > code {
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 0.05rem 0.35rem;
+    border-radius: 4px;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    background: var(--ok-soft);
+    color: var(--ok);
+    border: 1px solid var(--ok);
+  }
+
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0.7rem 0;
+  }
+  .flow-step {
+    display: flex;
+    gap: 0.7rem;
+    align-items: baseline;
+  }
+  .flow-step .idx {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--accent);
+    font-size: 0.82rem;
+    flex: 0 0 1.4rem;
+  }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    .meta-row { gap: 0.9rem; }
+  }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<div class="page">
+  <div class="masthead">
+    <div class="eyebrow">Take-Home Submission</div>
+    <h1>Fintech Test Automation Framework</h1>
+    <p class="subtitle">Playwright + TypeScript framework covering API and UI testing for the User and Transaction services, with a mock backend built to exercise it against.</p>
+    <div class="meta-row">
+      <span><strong>Stack:</strong> Playwright, TypeScript, Express</span>
+      <span><strong>Scope:</strong> API suite, UI suite, utilities, reporting</span>
+      <span><strong>Repo:</strong> qe-take-home-assessment/</span>
+    </div>
+  </div>
+
+  <h2><span class="num">01</span> API Test Suite</h2>
+  <p>Tests run against a small Express mock of the two services described in the brief — <code>POST /api/users</code>, <code>GET /api/users/:id</code>, <code>POST /api/transactions</code>, <code>GET /api/transactions/:userId</code> — backed by an in-memory store that resets between tests.</p>
+
+  <div class="card">
+    <h3>CRUD operations</h3>
+    <ul class="checklist">
+      <li>Create a user and confirm the response shape and field values <span class="path">users.api.spec.ts</span></li>
+      <li>Fetch a user by id, including the 404 path for an unknown id</li>
+      <li>Create transfer, deposit, and withdrawal transactions <span class="path">transactions.api.spec.ts</span></li>
+      <li>List a user's transactions — empty list, multiple results, and isolation between users</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Error scenario handling</h3>
+    <ul class="checklist">
+      <li>Duplicate email on user creation → 409</li>
+      <li>Transaction against an unknown <code>userId</code> or <code>recipientId</code> → 404</li>
+      <li>Transfer submitted without a <code>recipientId</code> → 400</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Data validation</h3>
+    <ul class="checklist">
+      <li>Missing name, malformed email, invalid <code>accountType</code> all rejected with 400 + field detail</li>
+      <li>Zero or negative transaction amount rejected with 400</li>
+      <li>Invalid transaction <code>type</code> rejected with 400</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Authentication / authorization</h3>
+    <ul class="checklist">
+      <li>Request with no <code>x-api-key</code> header → 401</li>
+      <li>Request with an invalid key → 403</li>
+      <li>Checked on both the user and transaction endpoints</li>
+    </ul>
+  </div>
+
+  <h2><span class="num">02</span> UI Test Suite</h2>
+  <p>A minimal static frontend (plain HTML + JS, no framework) stands in for the real one, giving Playwright actual pages to drive instead of testing against fixtures.</p>
+
+  <div class="card">
+    <h3>User registration flow</h3>
+    <ul class="checklist">
+      <li>Fill the form, submit, and confirm the success message renders <span class="path">registration.ui.spec.ts</span></li>
+      <li>Submitting a duplicate email surfaces the server's error text in the UI</li>
+      <li>Leaving a required field empty triggers native browser validation</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Transaction creation flow</h3>
+    <ul class="checklist">
+      <li>Successful transfer and deposit both show a confirmation message <span class="path">transaction.ui.spec.ts</span></li>
+      <li>Unknown <code>userId</code> or <code>recipientId</code> shows the error message from the API</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Error message validation</h3>
+    <p style="margin:0;">Every negative-path test asserts on the actual text rendered in the error banner, not just that an error element exists — so a regression that swaps in the wrong message fails the test.</p>
+  </div>
+
+  <h2><span class="num">03</span> Test Utilities</h2>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Utility</th><th>File</th><th>Purpose</th></tr>
+      <tr><td>Test data factories</td><td class="path">tests/utils/factories.ts</td><td>Builds valid user/transaction payloads with sane defaults, overridable per test, unique emails per run</td></tr>
+      <tr><td>Helper functions</td><td class="path">tests/utils/apiClient.ts</td><td>Thin wrapper around Playwright's request context — one method per endpoint, headers handled centrally</td></tr>
+      <tr><td>Environment configuration</td><td class="path">config/env.ts</td><td>Reads base URL and API key from <code>config/environments/dev.json</code>, overridable via env vars</td></tr>
+      <tr><td>Custom assertions</td><td class="path">tests/utils/assertions.ts</td><td><code>expectSuccess</code> / <code>expectError</code> / shape checkers for users and transactions</td></tr>
+    </table>
+  </div>
+
+  <h2><span class="num">04</span> Reporting</h2>
+  <div class="card">
+    <h3>Test results — multiple formats</h3>
+    <p style="margin:0 0 0.5rem;">Configured in <code>playwright.config.ts</code>:</p>
+    <ul class="checklist">
+      <li><span class="pill">list</span> live output in the terminal while the run is in progress</li>
+      <li><span class="pill">html</span> interactive report at <code>playwright-report/index.html</code></li>
+      <li><span class="pill">json</span> machine-readable results at <code>test-results/results.json</code></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Screenshots for UI failures</h3>
+    <p style="margin:0;"><code>screenshot: 'only-on-failure'</code> in the Playwright config captures the page automatically whenever a UI test fails; two of the UI tests also take an explicit screenshot at the error state for the report.</p>
+  </div>
+  <div class="card">
+    <h3>API response logging</h3>
+    <p style="margin:0;"><code>tests/utils/logger.ts</code> writes each logged API call — status, headers, body — to its own JSON file under <code>test-results/api-logs/</code>, so a failing assertion can be traced back to the exact response that caused it.</p>
+  </div>
+
+  <h2><span class="num">—</span> Running It End to End</h2>
+  <p>One command handles the whole flow — Playwright starts the mock server, waits for it to be healthy, runs the suite, and shuts it down.</p>
+  <pre>npm install
+npx playwright install chromium
+npm test</pre>
+
+  <div class="flow">
+    <div class="flow-step"><span class="idx">1</span><span>Playwright's <code>webServer</code> hook runs <code>npx ts-node mock-server/server.ts</code> and polls <code>/health</code> until it responds.</span></div>
+    <div class="flow-step"><span class="idx">2</span><span>Each test's <code>beforeEach</code> calls <code>POST /api/test-utils/reset</code> so the in-memory store starts clean.</span></div>
+    <div class="flow-step"><span class="idx">3</span><span>API specs hit the endpoints directly through <code>ApiClient</code>; UI specs load the static pages and drive them through the browser.</span></div>
+    <div class="flow-step"><span class="idx">4</span><span>Reports and logs land under <code>playwright-report/</code> and <code>test-results/</code> once the run finishes.</span></div>
+  </div>
+
+  <p>Narrower runs:</p>
+  <pre>npm run test:api    # API suite only
+npm run test:ui     # UI suite only
+npm run report      # open the last HTML report</pre>
+
+  <footer>
+    Fintech QE Take-Home — submission notes. See <code>README.md</code> in the repo for the full write-up, including what was left out for time and what I'd add next.
+  </footer>
+</div>
